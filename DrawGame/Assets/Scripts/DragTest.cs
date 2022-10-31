@@ -12,6 +12,7 @@ public class DragTest : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDrag
     public List<LineRenderer> lines = new List<LineRenderer>();
     List<Vector2> points = new List<Vector2>();
     EdgeCollider2D collider;
+    public ContactFilter2D contactFilter;
     public float time;
     private void Awake()
     {
@@ -20,6 +21,7 @@ public class DragTest : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDrag
     }
     public void OnBeginDrag(PointerEventData pointerEvent)
     {
+        if (CheckCollistion(pointerEvent.position)) return;
         line = Instantiate(PrefabLine).GetComponent<LineRenderer>();
         collider = line.gameObject.GetComponent<EdgeCollider2D>();
         Vector3 point = ConvertWorldPosition(pointerEvent.position);
@@ -30,7 +32,14 @@ public class DragTest : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDrag
  
     public void OnDrag(PointerEventData pointerEvent)
     {
+        if (line == null) return;
         if (time <= 0.05f) return;
+        if (CheckCollistion(pointerEvent.position))
+        {
+            points.Clear();
+            Destroy(line.gameObject);
+            return;
+        }
         index++;
         line.positionCount++;
         Vector3 point = ConvertWorldPosition(pointerEvent.position);
@@ -40,6 +49,7 @@ public class DragTest : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDrag
     }
     public void OnEndDrag(PointerEventData pointerEvent)
     {
+        if (points.Count == 0) return;
         index = 0;
         line.gameObject.transform.position = Vector3.zero;
         line.useWorldSpace = false;
@@ -51,6 +61,18 @@ public class DragTest : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDrag
     {
         Vector3 vector = camera.ScreenToWorldPoint(pos);
         return new Vector3(vector.x,vector.y,0);
+    }
+
+    public bool CheckCollistion(Vector3 pos)
+    {
+        Vector2 vector = ConvertWorldPosition(pos);
+        RaycastHit2D hit = Physics2D.Raycast(vector, Vector2.zero);
+        if (hit.collider != null)
+        {
+            return true;
+        }
+        return false;
+
     }
     public void TimeWait()
     {
