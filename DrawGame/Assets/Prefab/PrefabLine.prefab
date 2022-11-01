@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 410826184784630306}
   - component: {fileID: 410826184784630309}
   - component: {fileID: 4996332609764179321}
-  - component: {fileID: -6985601574354073710}
+  - component: {fileID: -6235278603493271619}
   m_Layer: 3
   m_Name: PrefabLine
   m_TagString: Untagged
@@ -153,7 +153,7 @@ EdgeCollider2D:
   m_AdjacentEndPoint: {x: 0, y: 0}
   m_UseAdjacentStartPoint: 0
   m_UseAdjacentEndPoint: 0
---- !u!50 &-6985601574354073710
+--- !u!50 &-6235278603493271619
 Rigidbody2D:
   serializedVersion: 4
   m_ObjectHideFlags: 0
@@ -165,12 +165,12 @@ Rigidbody2D:
   m_Simulated: 1
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
-  m_Mass: 1
-  m_LinearDrag: 0.5
+  m_Mass: 50
+  m_LinearDrag: 0
   m_AngularDrag: 0.05
-  m_GravityScale: 1
+  m_GravityScale: 0
   m_Material: {fileID: 0}
   m_Interpolate: 0
   m_SleepingMode: 1
   m_CollisionDetection: 0
-  m_Constraints: 0
+  m_Constraints: 7
