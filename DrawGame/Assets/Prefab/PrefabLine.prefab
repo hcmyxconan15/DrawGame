@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 410826184784630309}
   - component: {fileID: 4996332609764179321}
   - component: {fileID: -6235278603493271619}
+  - component: {fileID: 1294868586977040384}
   m_Layer: 3
   m_Name: PrefabLine
   m_TagString: Untagged
@@ -75,8 +76,7 @@ LineRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Positions:
-  - {x: 0, y: 0, z: 0}
+  m_Positions: []
   m_Parameters:
     serializedVersion: 3
     widthMultiplier: 0.05
@@ -125,12 +125,12 @@ LineRenderer:
       m_NumColorKeys: 2
       m_NumAlphaKeys: 2
     numCornerVertices: 0
-    numCapVertices: 0
+    numCapVertices: 5
     alignment: 0
     textureMode: 0
     shadowBias: 0.5
     generateLightingData: 0
-  m_UseWorldSpace: 1
+  m_UseWorldSpace: 0
   m_Loop: 0
 --- !u!68 &4996332609764179321
 EdgeCollider2D:
@@ -173,3 +173,16 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 0
+--- !u!114 &1294868586977040384
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 410826184784630308}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9cc6ffe4bcece4fa48c4f206d2e17ce4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  radius: 0.025

@@ -9,61 +9,36 @@ namespace MG_Draw
     {
         public GameObject PrefabLine;
         public float distanceMin;
-        private LineRenderer line;
+        private Line line;
         private Camera camera;
-        private int index = 0;
-        public List<LineRenderer> lines = new List<LineRenderer>();
-        private List<Vector2> points = new List<Vector2>();
-        private EdgeCollider2D collider;
-        private int cout;
+        private List<Line> lines = new List<Line>();
         private Rigidbody2D rigidbody2D;
         
         private void Awake()
         {
             camera = Camera.main;
-            cout = 0;
 
         }
         public void OnBeginDrag(PointerEventData pointerEvent)
         {
-            if (CheckCollistion(pointerEvent.position)) return;
-            line = Instantiate(PrefabLine).GetComponent<LineRenderer>();
-            collider = line.gameObject.GetComponent<EdgeCollider2D>();
             Vector3 point = ConvertWorldPosition(pointerEvent.position);
-            rigidbody2D = line.GetComponent<Rigidbody2D>();
-            CircleCollider2D cicle = line.gameObject.AddComponent<CircleCollider2D>();
-            cicle.radius = 0.025f;
-            cicle.offset = point;
-            line.gameObject.transform.position = point;
-            line.SetPosition(0, point);
-            points.Add((Vector2)point);
-            cout++;
+            line = Instantiate(PrefabLine).GetComponent<Line>();
+            line.SetPointMinDistance(distanceMin);
+            line.UsePhysic(false);
+            line.AddPoint(point);
         }
 
         public void OnDrag(PointerEventData pointerEvent)
         {
             Vector3 point = ConvertWorldPosition(pointerEvent.position);
-            if (CheckDistance(points[cout-1], point)) return;
-            index++;
-            line.positionCount++;
-            CircleCollider2D cicle = line.gameObject.AddComponent<CircleCollider2D>();
-            cicle.radius = 0.025f;
-            cicle.offset = point;
-            line.SetPosition(index, point);
-            points.Add((Vector2)point);
-            if (cout > 1) collider.SetPoints(points);
-            cout++;
+            line.AddPoint(point);
+            
         }
         public void OnEndDrag(PointerEventData pointerEvent)
         {
-            if (cout <= 1) return;
-            index = 0;
-            line.gameObject.transform.position = Vector3.zero;
-            line.useWorldSpace = false;
+            line.UsePhysic(true);
             lines.Add(line);
-            cout = 0;
-            //Publisher.Instant.Broadcast(EnumObsever.Default);
-            points.Clear();
+
         }
         public Vector3 ConvertWorldPosition(Vector3 pos)
         {
@@ -81,10 +56,6 @@ namespace MG_Draw
             }
             return false;
 
-        }
-        public bool CheckDistance(Vector2 from, Vector2 to)
-        {
-            return Vector2.Distance(from, to) <= distanceMin;
         }
 
         public void RemoveLine()
