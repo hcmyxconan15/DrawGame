@@ -9,6 +9,8 @@ namespace MG_Draw
     [RequireComponent(typeof(EdgeCollider2D))]
     public class Line : MonoBehaviour
     {
+        public bool CantDraw => cantDraw;
+        private bool cantDraw = false;
         private Rigidbody2D rigidbody2D => GetComponent<Rigidbody2D>();
         private LineRenderer lineRenderer => GetComponent<LineRenderer>();
         private EdgeCollider2D edgeCollider2D => GetComponent<EdgeCollider2D>();
@@ -19,12 +21,11 @@ namespace MG_Draw
 
         public void AddPoint(Vector2 point)
         {
+            if (CantDraw) return;
             if (count >=1 &&CheckDistance(GetLastPoint().Value, point)) return;
             count++;
             lineRenderer.positionCount = count;
             lineRenderer.SetPosition(count - 1, point);
-
-            
             points.Add(point);
 
 
@@ -35,14 +36,19 @@ namespace MG_Draw
             if (count >1)
                 edgeCollider2D.SetPoints(points);
         }
-
+        public void SetDraw()
+        {
+            cantDraw = true;
+            this.gameObject.layer = LayerMask.NameToLayer("CantDrawLayer");
+        }
         public void SetPointMinDistance(float _distance)
         {
             this.distance = _distance;
         }
-
+        
         public void UsePhysic(bool usePhysic)
         {
+            if (cantDraw) return;
             rigidbody2D.isKinematic = !usePhysic;
         }
         private bool CheckDistance(Vector2 from, Vector2 to)

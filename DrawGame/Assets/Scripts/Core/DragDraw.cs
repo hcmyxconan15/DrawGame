@@ -9,6 +9,7 @@ namespace MG_Draw
     {
         public GameObject PrefabLine;
         public float distanceMin;
+        public LayerMask CantDrawLayer;
         private Line line;
         private Camera camera;
         private List<Line> lines = new List<Line>();
@@ -30,13 +31,20 @@ namespace MG_Draw
 
         public void OnDrag(PointerEventData pointerEvent)
         {
+            
             Vector3 point = ConvertWorldPosition(pointerEvent.position);
+            if (CheckPhysicsPlayer(point, CantDrawLayer))
+            {
+                OnEndDrag(pointerEvent);
+                return;
+            }
             line.AddPoint(point);
             
         }
         public void OnEndDrag(PointerEventData pointerEvent)
         {
             line.UsePhysic(true);
+            line.SetDraw();
             lines.Add(line);
 
         }
@@ -58,6 +66,11 @@ namespace MG_Draw
 
         }
 
+        public bool CheckPhysicsPlayer(Vector2 point, LayerMask layer)
+        {
+            RaycastHit2D hit = Physics2D.CircleCast(point, 0.025f, Vector2.zero, 1f, layer);
+            return hit.collider != null ? true : false;
+        }
         public void RemoveLine()
         {
             foreach (var item in lines)
